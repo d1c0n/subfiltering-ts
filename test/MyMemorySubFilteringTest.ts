@@ -111,17 +111,6 @@ describe('MyMemorySubFilteringTest', () => {
     assert.strictEqual(filter.fromLayer0ToLayer1(db_segment), segment_from_UI);
   });
 
-  // public function testWithDoubleUnderscore()
-  // {
-  //     const filter = getFilterInstance();
-  //
-  //     const db_segment = 'This string contains __placeholder_one__';
-  //     const segment_from_UI = 'This string contains <ph id="mtc_1" ctype="'.CTypeEnum::DOUBLE_UNDERSCORE.'" equiv-text="base64:X19wbGFjZWhvbGRlcl9vbmVfXw=="/>';
-  //
-  //     assert.strictEqual( db_segment, filter.fromLayer1ToLayer0( segment_from_UI ) );
-  //     assert.strictEqual( segment_from_UI, filter.fromLayer0ToLayer1( db_segment ) );
-  // }
-
   it('testWithDollarCurlyBrackets', {skip: false}, () => {
     const filter = getFilterInstance();
     const db_segment = 'This string contains ${placeholder_one}';
