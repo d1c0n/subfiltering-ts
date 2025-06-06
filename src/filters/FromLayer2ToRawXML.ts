@@ -15,6 +15,10 @@ export class FromLayer2ToRawXML extends AbstractHandler {
       .replace(//g, '&#157;'); // This character might need special handling depending on context
 
     // now convert the real &nbsp;
-    return segment.replace(new RegExp(ConstantEnum.nbspPlaceholder, 'g'), String.fromCodePoint(0xa0));
+
+    // escape dollar sign in regex
+    const nbspPlaceholder = ConstantEnum.nbspPlaceholder.replace(/\$/g, '\\$');
+    const nbspRegex = new RegExp(nbspPlaceholder, 'g');
+    return segment.replace(nbspRegex, Utils.unicode2Chr(0xa0));
   }
 }
