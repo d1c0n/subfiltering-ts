@@ -21,7 +21,7 @@ export class Pipeline {
   public constructor(source: string | null = null, target: string | null = null, dataRefMap: Record<string, any> = {}) {
     this.source = source;
     this.target = target;
-    this.dataRefMap = new Map();
+    this.dataRefMap = new Map(Object.entries(dataRefMap));
   }
 
   /**
@@ -71,7 +71,7 @@ export class Pipeline {
    * @returns {Map<string, any>}
    */
   public getDataRefMap(): Record<string, any> {
-    return this.dataRefMap;
+    return Object.fromEntries(this.dataRefMap);
   }
 
   /**
