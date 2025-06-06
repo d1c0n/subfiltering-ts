@@ -1,4 +1,4 @@
-import * as xmljs from 'xml-js';
+import { DOMParser, Document } from '@xmldom/xmldom';
 import { CTypeEnum, CTypeEnumHelper } from '../enums/CTypeEnum';
 import { DataRefReplacer } from '../utils/DataRefReplacer';
 import { AbstractHandler } from '../commons/AbstractHandler';
@@ -86,56 +86,49 @@ export class DataRefReplace extends AbstractHandler {
      * and if it has a dataRef attribute, that dataRef is not found in the dataRefMap.
      */
     private isAValidPhTag(phTag: string): boolean {
-        let parsedJsObj: xmljs.Element | xmljs.ElementCompact;
+        let doc: Document;
         try {
-            // Parse the individual phTag string.
-            // Options: compact: false -> standard verbose structure. alwaysArray: true -> predictable output.
-            parsedJsObj = xmljs.xml2js(phTag, { compact: false, alwaysArray: true, trim: false });
+            doc = new DOMParser().parseFromString(phTag, 'text/xml');
         } catch (e) {
             // If parsing fails (e.g., malformed XML snippet), consider it not a valid tag for this processing.
-            return false; 
-        }
-
-        // Expected structure with compact:false, alwaysArray:true : { elements: [ actualElement ] }
-        const rootContainer = parsedJsObj as { elements?: xmljs.Element[] }; 
-        if (!rootContainer.elements || rootContainer.elements.length === 0) {
             return false;
         }
-        
-        const phNode: xmljs.Element = rootContainer.elements[0];
-        // Ensure it's an element named 'ph'
-        if (!phNode || phNode.type !== 'element' || phNode.name !== 'ph') {
-            return false; 
+
+        if (doc.getElementsByTagName('parsererror').length > 0) {
+            return false;
         }
 
-        const attributes = phNode.attributes || {}; // xmljs.ElementAttributes
+        // The first element should be our <ph> tag
+        const phNode = doc.documentElement;
+        if (!phNode || phNode.nodeName !== 'ph') {
+            return false;
+        }
 
         // Check for Matecat ctype
-        const cType = attributes.ctype ? String(attributes.ctype) : null;
+        const cType = phNode.getAttribute('ctype');
         if (cType && CTypeEnumHelper.isMatecatCType(cType)) {
             return false; // Already a Matecat tag, don't process further
         }
 
-        // If has equiv-text, don't touch
-        if (attributes.hasOwnProperty('equiv-text')) {
+        // If it has equiv-text, don't touch
+        if (phNode.hasAttribute('equiv-text')) {
             return false;
         }
 
-        if (attributes.hasOwnProperty('dataRef')) {
-            const dataRefAttr = String(attributes.dataRef);
+        if (phNode.hasAttribute('dataRef')) {
+            const dataRefAttr = phNode.getAttribute('dataRef');
             // If dataRefMap does NOT have dataRefAttr as a key, then it's a "valid" tag for this replacement.
-            if (this.dataRefMap && !this.dataRefMap.hasOwnProperty(dataRefAttr)) {
+            if (dataRefAttr && this.dataRefMap && !this.dataRefMap.hasOwnProperty(dataRefAttr)) {
                 return true; 
             }
-            // Otherwise (key IS in map, or dataRefMap itself is undefined/null - though transform ensures it's an object),
-            // it's not a "valid" tag for this method's replacement.
-            // If key is in map, it's handled by DataRefReplacer or it's intentionally kept.
+            // Otherwise, it's not a "valid" tag for this method's replacement.
             return false; 
         }
 
         // If no Matecat ctype, no equiv-text, and no dataRef attribute, it's considered "valid" for replacement.
         return true;
     }
+
 
     /**
      * This function replaces pc tags (from Xliff 2.0) that do not have dataRef correspondence
