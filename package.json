@@ -10,15 +10,14 @@
   "description": "",
   "type": "module",
   "dependencies": {
+    "@xmldom/xmldom": "^0.9.8",
     "html-entities": "^2.6.0",
     "jsdom": "^26.1.0",
     "typescript": "^5.8.3",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.10",
     "@types/node": "^22.15.21",
-    "mocha": "^11.5.0",
     "ts-node": "^10.9.2"
   }
 }
