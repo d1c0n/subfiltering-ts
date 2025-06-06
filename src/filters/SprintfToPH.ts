@@ -35,15 +35,18 @@ export class SprintfToPH extends AbstractHandler {
     segment = sprintfLocker.lock(segment);
 
     // Octal parsing is disabled due to Hungarian percentages 20%-os
-    const regex = /(?:%%)|(%(?:(?:[1-9]\d*)\$|\((?:[^)]+)\))?(?:\+)?(?:0|[+-]?'[^$])?(?:-)?(?:\d+)?(?:\.(?:\d+))?((?:[hjlqtzL]{0,2}[ac-giopsuxAC-GOSUX]{1})(?![\d\w])|(?:#@[\w]+@)|(?:@)))/g;
-    let match;
+    const regex = /(?:\x25\x25)|(\x25(?:(?:[1-9]\d*)\$|\((?:[^\)]+)\))?(?:\+)?(?:0|[+-]?\'[^$])?(?:-)?(?:\d+)?(?:\.(?:\d+))?((?:[hjlqtzL]{0,2}[ac-giopsuxAC-GOSUX]{1})(?![\d\w])|(?:#@[\w]+@)|(?:@)))/g
+    const matches = [...segment.matchAll(regex)];
 
-    while ((match = regex.exec(segment)) !== null) {
+    matches.forEach((match) => {
       const variable = match[0];
       // Replace subsequent elements excluding already encoded
       const replacement = `<ph id="${this.pipeline.getNextId()}" ctype="${CTypeEnum.SPRINTF}" equiv-text="base64:${Buffer.from(variable).toString('base64')}"/>`;
       segment = segment.replace(variable, replacement);
-    }
+    });
+
+
+   
 
     // revert placeholding
     segment = sprintfLocker.unlock(segment);
