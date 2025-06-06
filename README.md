@@ -58,9 +58,9 @@ Where `Layer0` is the DB layer, `Layer1` is the intermediate layer and `Layer2` 
 In the `tests` folder there is an fully working example of a concrete implementation of `FeatureSetInterface` with a custom filter.
 
 ```
-// tests/Mocks 
+// tests/mocks 
 .
-├── Features
+├── features
 │   ├── AirbnbFeature.ts
 │   └── BaseFeature.ts
 └── FeatureSet.ts
