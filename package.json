@@ -12,7 +12,6 @@
   "dependencies": {
     "@xmldom/xmldom": "^0.9.8",
     "html-entities": "^2.6.0",
-    "jsdom": "^26.1.0",
     "typescript": "^5.8.3"
   },
   "devDependencies": {
