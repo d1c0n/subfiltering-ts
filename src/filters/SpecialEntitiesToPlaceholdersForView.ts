@@ -5,7 +5,7 @@ export class SpecialEntitiesToPlaceholdersForView extends AbstractHandler {
   public transform(segment: string): string {
     segment = segment.replace(/&#10;/gi, ConstantEnum.lfPlaceholder);
     segment = segment.replace(/&#13;/gi, ConstantEnum.crPlaceholder);
-    segment = segment.replace(/ /gi, ConstantEnum.nbspPlaceholder); // NBSP in ascii value
+    segment = segment.replace(/ /gi, ConstantEnum.nbspPlaceholder); // NBSP in ascii value
     segment = segment.replace(/&#x0A;/gi, ConstantEnum.lfPlaceholder);
     segment = segment.replace(/&#x0C;/gi, ConstantEnum.crPlaceholder);
     segment = segment.replace(/&#160;/gi, ConstantEnum.nbspPlaceholder);
