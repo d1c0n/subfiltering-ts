@@ -19,6 +19,6 @@ export class FromLayer2ToRawXML extends AbstractHandler {
     // escape dollar sign in regex
     const nbspPlaceholder = ConstantEnum.nbspPlaceholder.replace(/\$/g, '\\$');
     const nbspRegex = new RegExp(nbspPlaceholder, 'g');
-    return segment.replace(nbspRegex, Utils.unicode2Chr(0xa0));
+    return segment.replace(nbspRegex, String.fromCodePoint(0xa0));
   }
 }

@@ -69,9 +69,7 @@ export class DataRefReplace extends AbstractHandler {
         let currentSegment = segment;
         for (const phTag of phTagsMatches) {
             if (this.isAValidPhTag(phTag)) {
-                // Escape phTag for use in RegExp constructor, similar to PHP's preg_quote
                 const escapedPhTag = phTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                // Create a new RegExp for replacement; it will only match the first occurrence by default
                 const regexToReplace = new RegExp(escapedPhTag); 
 
                 const replacementString = `<ph id="${this.pipeline.getNextId()}" ctype="${CTypeEnum.ORIGINAL_PH_OR_NOT_DATA_REF}" equiv-text="base64:${Buffer.from(phTag).toString('base64')}"/>`;

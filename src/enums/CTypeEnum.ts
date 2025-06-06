@@ -49,8 +49,8 @@ export class CTypeEnumHelper {
         if (Object.prototype.hasOwnProperty.call(CTypeEnum, key)) {
           const value = CTypeEnum[key as keyof typeof CTypeEnum];
           if (typeof value === 'string') {
-            allConstants[value] = key; // value as key, key as value (PHP array_flip behavior)
-            if (Utils.contains('DATA_REF', key)) {
+            allConstants[value] = key;
+            if (key.includes('DATA_REF')) {
               layer2Constants[value] = key;
             }
           }
