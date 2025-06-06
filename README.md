@@ -1,10 +1,6 @@
-# Matecat Subfiltering
+# Matecat Subfiltering Port in Typescript
 
-[![Build Status](https://app.travis-ci.com/matecat/subfiltering.svg?token=qBazxkHwP18h3EWnHjjF&branch=master)](https://app.travis-ci.com/matecat/subfiltering)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/matecat/subfiltering/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/matecat/subfiltering/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/matecat/subfiltering/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/matecat/subfiltering/?branch=master)
-
-Subfiltering is a component used by [Matecat](https://matecat.com) and [MyMemory](https://mymemory.translated.net/)) for string conversion from database to UI layer and viceversa.
+This is a Typescript port of the [Matecat Subfiltering](https://github.com/matecat/subfiltering/) library, which is a PHP library designed to handle subfiltering of translation segments in various layers. The original library is used to convert translation segments between different layers, such as from a database layer to an intermediate layer and then to a UI layer.
 
 ## How to use
 
@@ -15,20 +11,21 @@ There are two filters available (both are implementation of `AbstractFilter`):
 
 Use `getInstance` method to instantiate these classes:
 
-```php
+```ts
 
-use Matecat\SubFiltering\MateCatFilter;
+import { MateCatFilter } from 'subfiltering-ts';
+import { FeatureSet } from './path/to/FeatureSet';
 
-$filter = MateCatFilter::getInstance(new FeatureSet(), 'it-IT', 'en-EN', []);
+const filter = MateCatFilter.getInstance(new FeatureSet(), 'it-IT', 'en-EN', []);
 ```
 
 The first argument MUST be concrete implementation of `Matecat\SubFiltering\Contracts\FeatureSetInterface`.
 
 The other three arguments are optional:
 
-- `$source` (string) - The source language
-- `$target` (string) - The target language
-- `$dataRefMap` (array) - A map used for tag replacement (only for segments from Xliff 2.0). A full documentation for dataRef replacement is available [here](https://github.com/matecat/subfiltering/blob/master/docs/dataRef.md).
+- `source` (string) - The source language
+- `target` (string) - The target language
+- `dataRefMap` (Record<string, any>) - A map used for tag replacement (only for segments from Xliff 2.0). A full documentation for dataRef replacement is available [here](https://github.com/matecat/subfiltering/blob/master/docs/dataRef.md).
 
 ### dataRef replacement
 
@@ -64,17 +61,13 @@ In the `tests` folder there is an fully working example of a concrete implementa
 // tests/Mocks 
 .
 ├── Features
-│   ├── AirbnbFeature.php
-│   └── BaseFeature.php
-└── FeatureSet.php
+│   ├── AirbnbFeature.ts
+│   └── BaseFeature.ts
+└── FeatureSet.ts
 
 ```
 
-## Support
-
-If you found an issue or had an idea please refer [to this section](https://github.com/matecat/subfiltering/issues).
-
-## Authors
+## Authors of the original library
 
 * **Mauro Cassani** - [github](https://github.com/mauretto78)
 * **Domenico Lupinetti** - [github](https://github.com/ostico)

@@ -7,7 +7,7 @@
     "test": "npx tsx --test test/*.ts"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "@xmldom/xmldom": "^0.9.8",
