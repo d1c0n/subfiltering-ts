@@ -30,7 +30,6 @@ export class DataRefReplace extends AbstractHandler {
         let currentSegment = segment;
 
         // dataRefMap is present only in xliff 2.0 files
-        // PHP's empty() on an array checks if it's empty. For an object, Object.keys().length === 0 is similar.
         if (Object.keys(this.dataRefMap).length === 0) {
             currentSegment = this.replace_Ph_TagsWithoutDataRefCorrespondenceToMatecatPhTags(currentSegment);
             currentSegment = this.replace_Pc_TagsWithoutDataRefCorrespondenceToMatecatPhTags(currentSegment);
@@ -53,7 +52,7 @@ export class DataRefReplace extends AbstractHandler {
      * (or dataRef is not in the map) with regular Matecat <ph> tags for UI presentation.
      */
     private replace_Ph_TagsWithoutDataRefCorrespondenceToMatecatPhTags(segment: string): string {
-        const phTagRegex = /<(ph .*?)>/gi; // PHP: /<(ph .*?)>/iu
+        const phTagRegex = /<(ph .*?)\/>/gi; // PHP: /<(ph .*?)>/iu
         let match;
         
         const phTagsMatches: string[] = [];
