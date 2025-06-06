@@ -14,14 +14,17 @@ export class MateCatCustomPHToOriginalValue extends AbstractHandler {
    * @returns string
    */
   private restoreOriginalTags(segment: string): string {
-    const regex = /<ph id\s*=\s*["']mtc_[0-9]+["'] ctype\s*=\s*["']([^"']+)["'] x-orig\s*=\s*["']([^"']+)["'] equiv-text\s*=\s*["']base64:[^"']+["']\s*\/>/gi;
-    let match;
+    const regex = /<ph id\s*=\s*[\"\']mtc_[0-9]+[\"\'] ctype\s*=\s*[\"\']([^\"\']+)[\"\'] x-orig\s*=\s*[\"\']([^\"\']+)[\"\'] equiv-text\s*=\s*["']base64:[^\"\']+[\"\']\s*\/>/gi;
+    const matches = [...segment.matchAll(regex)];
 
-    while ((match = regex.exec(segment)) !== null) {
-      const originalTag = match[0];
-      const decodedValue = Buffer.from(match[2], 'base64').toString('utf8');
-      segment = segment.replace(originalTag, decodedValue);
-    }
+    matches.forEach(match => {
+        /*
+            * This code tries to handle xliff/html tags (encoded) inside an xliff.
+            */
+        const subfilterTag = match[0];
+        const value = Buffer.from(match[2], 'base64').toString('utf8');
+        segment = segment.replace(subfilterTag, value);
+    });
     return segment;
   }
 
@@ -34,17 +37,17 @@ export class MateCatCustomPHToOriginalValue extends AbstractHandler {
    */
   private restoreFilteredContent(segment: string): string {
     // pipeline for restore PH tag of subfiltering to original encoded HTML
-    const regex = /<ph id\s*=\s*["']mtc_[0-9]+["'] ctype\s*=\s*["']([0-9a-zA-Z\-_]+)["'] equiv-text\s*=\s*["']base64:([^"']+)["']\s*\/>/gi;
-    let match;
+    const regex = /<ph id\s*=\s*[\"\']mtc_[0-9]+[\"\'] ctype\s*=\s*[\"\']([0-9a-zA-Z\-_]+)[\"\'] equiv-text\s*=\s*[\"\']base64:([^\"\']+)[\"\']\s*\/>/gi;
+    const matches = [...segment.matchAll(regex)];
 
-    while ((match = regex.exec(segment)) !== null) {
-      /*
-       * This code tries to handle xliff/html tags (encoded) inside an xliff.
-       */
-      const subfilterTag = match[0];
-      const value = Buffer.from(match[2], 'base64').toString('utf8');
-      segment = segment.replace(subfilterTag, value);
-    }
+    matches.forEach(match => {
+        /*
+            * This code tries to handle xliff/html tags (encoded) inside an xliff.
+            */
+        const subfilterTag = match[0];
+        const value = Buffer.from(match[2], 'base64').toString('utf8');
+        segment = segment.replace(subfilterTag, value);
+    });
     return segment;
   }
 }
