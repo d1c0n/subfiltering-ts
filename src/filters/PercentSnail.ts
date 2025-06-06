@@ -3,9 +3,7 @@ import { CTypeEnum } from '../enums/CTypeEnum';
 import { SprintfLocker } from './sprintf/SprintfLocker';
 
 export class PercentSnail extends AbstractHandler {
-  /**
-   * @inheritDoc
-   */
+
   public transform(segment: string): string {
     const sprintfLocker = new SprintfLocker(this.pipeline.getSource(), this.pipeline.getTarget());
 

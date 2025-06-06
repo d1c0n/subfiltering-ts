@@ -10,9 +10,6 @@ export class RubyOnRailsI18n extends AbstractHandler {
    * ```
    * Dear %{person}, This is %{agent.alias} from Customer. %{ this will not locked } e %{ciao}
    * ```
-   *
-   * @param segment
-   * @returns string
    */
   public transform(segment: string): string {
     /*

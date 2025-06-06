@@ -2,9 +2,7 @@ import { AbstractHandler } from '../commons/AbstractHandler';
 import { CTypeEnum } from '../enums/CTypeEnum';
 
 export class PercentNumberSnail extends AbstractHandler {
-  /**
-   * @inheritDoc
-   */
+
   public transform(segment: string): string {
     const regex = /%\d+\$@/g;
     let match;

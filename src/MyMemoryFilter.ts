@@ -39,10 +39,6 @@ import { Variables } from './filters/Variables';
 export class MyMemoryFilter extends AbstractFilter {
   /**
    * Used to transform database raw xml content ( Layer 0 ) to the sub filtered structures, used for server to server ( Ex: TM/MT ) communications ( Layer 1 )
-   *
-   * @param segment
-   * @param cid
-   * @returns
    */
   public fromLayer0ToLayer1(segment: string, cid: string | null = null): string {
     const channel = new Pipeline(this.source, this.target);
@@ -80,16 +76,11 @@ export class MyMemoryFilter extends AbstractFilter {
     channel.addLast(new RestoreXliffTagsContent());
     channel.addLast(new RestorePlaceHoldersToXLIFFLtGt());
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     return (this.featureSet as FeatureSetInterface).filter('fromLayer0ToLayer1', channel).transform(segment);
   }
 
   /**
    * Used to transform external server raw xml content ( Ex: TM/MT ) to allow them to be stored in database ( Layer 0 ), used for server to server communications ( Layer 1 )
-   *
-   * @param segment
-   * @returns
    */
   public fromLayer1ToLayer0(segment: string): string {
     const channel = new Pipeline(this.source, this.target, this.dataRefMap);
@@ -101,8 +92,6 @@ export class MyMemoryFilter extends AbstractFilter {
     channel.addLast(new RestorePlaceHoldersToXLIFFLtGt());
     channel.addLast(new SplitPlaceholder());
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     return (this.featureSet as FeatureSetInterface).filter('fromLayer1ToLayer0', channel).transform(segment);
   }
 }

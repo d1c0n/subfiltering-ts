@@ -2,9 +2,7 @@ import { AbstractHandler } from '../commons/AbstractHandler';
 import { ConstantEnum } from '../enums/ConstantEnum';
 
 export class CtrlCharsPlaceHoldToAscii extends AbstractHandler {
-  /**
-   * @inheritDoc
-   */
+
   public transform(segment: string): string {
     // Replace br placeholders
     segment = segment.replace(new RegExp(ConstantEnum.crlfPlaceholder.replace(/\$/g, '\\$'), 'g'), '\r\n');

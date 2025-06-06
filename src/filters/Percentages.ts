@@ -10,9 +10,6 @@ export class Percentages extends AbstractHandler {
    * ```
    * Dear %%customer.first_name%%, This is %agent.alias%% from Skyscanner. % this-will-not-locked % e %%ciao%% a {%this-will-not-locked%
    * ```
-   *
-   * @param segment
-   * @returns string
    */
   public transform(segment: string): string {
     const regex = /%%[^<>\s%{}]+?%%/g;

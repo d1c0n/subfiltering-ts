@@ -15,9 +15,6 @@ export class SingleCurlyBracketsToPh extends AbstractHandler {
    * ... {variable}
    * #}
    * ```
-   *
-   * @param segment
-   * @returns string
    */
   public transform(segment: string): string {
     const regex = /{[^<>{} ]+?}/g;

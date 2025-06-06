@@ -8,10 +8,7 @@ export class StandardPHToMateCatCustomPH extends AbstractHandler {
     return segment;
   }
 
-  /**
-   * @param segment
-   * @returns string
-   */
+
   private filterPhTagContent(segment: string): string {
     if (/<\/ph>/gi.test(segment)) {
       const regex = /<ph id=["']([^'"]+?)["'].*?>(.*?)<\/ph>/gi;
@@ -32,8 +29,6 @@ export class StandardPHToMateCatCustomPH extends AbstractHandler {
   /**
    * Show the equivalent text of the <ph> tag instead of the tag itself.
    *
-   * @param segment
-   * @returns string
    */
   private filterOriginalSelfClosePhTagsWithEquivText(segment: string): string {
     const regex = /<ph[^>]+?equiv-text\s*?=\s*?(["'])(?!base64:)(.*?)\1[^>]*?\/>/gi;

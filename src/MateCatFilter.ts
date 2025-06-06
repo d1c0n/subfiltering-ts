@@ -53,21 +53,13 @@ import { Variables } from './filters/Variables';
  * -- Existent tags in the XLIFF like <ph id="[0-9+]" equiv-text="<br/>"/> will leaved as is
  */
 export class MateCatFilter extends AbstractFilter {
-  /**
-   * Used to transform database raw xml content ( Layer 0 ) to the UI structures ( Layer 2 )
-   *
-   * @param segment
-   * @returns
-   */
+
   public fromLayer0ToLayer2(segment: string): string {
     return this.fromLayer1ToLayer2(this.fromLayer0ToLayer1(segment));
   }
 
   /**
    * Used to transform database raw xml content ( Layer 0 ) to the UI structures ( Layer 2 )
-   *
-   * @param segment
-   * @returns
    */
   public fromLayer1ToLayer2(segment: string): string {
     const channel = new Pipeline(this.source, this.target, this.dataRefMap);
@@ -75,16 +67,11 @@ export class MateCatFilter extends AbstractFilter {
     channel.addLast(new EntityToEmoji());
     channel.addLast(new DataRefReplace());
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     return (this.featureSet as FeatureSetInterface).filter('fromLayer1ToLayer2', channel).transform(segment);
   }
 
   /**
    * Used to transform UI data ( Layer 2 ) to the XML structures ( Layer 1 )
-   *
-   * @param segment
-   * @returns
    */
   public fromLayer2ToLayer1(segment: string): string {
     const channel = new Pipeline(this.source, this.target, this.dataRefMap);
@@ -96,8 +83,6 @@ export class MateCatFilter extends AbstractFilter {
     channel.addLast(new RestorePlaceHoldersToXLIFFLtGt());
     channel.addLast(new DataRefRestore());
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     return (this.featureSet as FeatureSetInterface).filter('fromLayer2ToLayer1', channel).transform(segment);
   }
 
@@ -106,9 +91,6 @@ export class MateCatFilter extends AbstractFilter {
    *
    * It is assumed that the UI send strings having XLF tags not encoded and HTML in XML encoding representation:
    * - <b>de <ph id="mtc_1" equiv-text="base64:JTEkcw=="/>, <x id="1" /> </b>que
-   *
-   * @param segment
-   * @returns
    */
   public fromLayer2ToLayer0(segment: string): string {
     return this.fromLayer1ToLayer0(this.fromLayer2ToLayer1(segment));
@@ -116,9 +98,6 @@ export class MateCatFilter extends AbstractFilter {
 
   /**
    * Used to transform database raw xml content ( Layer 0 ) to the sub filtered structures, used for server to server ( Ex: TM/MT ) communications ( Layer 1 )
-   *
-   * @param segment
-   * @returns
    */
   public fromLayer0ToLayer1(segment: string): string {
     const channel = new Pipeline(this.source, this.target, this.dataRefMap);
@@ -140,16 +119,11 @@ export class MateCatFilter extends AbstractFilter {
     channel.addLast(new RestoreXliffTagsContent());
     channel.addLast(new RestorePlaceHoldersToXLIFFLtGt());
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     return (this.featureSet as FeatureSetInterface).filter('fromLayer0ToLayer1', channel).transform(segment);
   }
 
   /**
    * Used to transform external server raw xml content ( Ex: TM/MT ) to allow them to be stored in database ( Layer 0 ), used for server to server communications ( Layer 1 )
-   *
-   * @param segment
-   * @returns
    */
   public fromLayer1ToLayer0(segment: string): string {
     const channel = new Pipeline(this.source, this.target, this.dataRefMap);
@@ -161,16 +135,11 @@ export class MateCatFilter extends AbstractFilter {
     channel.addLast(new RestorePlaceHoldersToXLIFFLtGt());
     channel.addLast(new SplitPlaceholder());
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     return (this.featureSet as FeatureSetInterface).filter('fromLayer1ToLayer0', channel).transform(segment);
   }
 
   /**
    * Used to convert the raw XLIFF content from file to an XML for the database ( Layer 0 )
-   *
-   * @param segment
-   * @returns
    */
   public fromRawXliffToLayer0(segment: string): string {
     const channel = new Pipeline(this.source, this.target, this.dataRefMap);
@@ -180,16 +149,11 @@ export class MateCatFilter extends AbstractFilter {
     channel.addLast(new RestoreXliffTagsContent());
     channel.addLast(new RestorePlaceHoldersToXLIFFLtGt());
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     return (this.featureSet as FeatureSetInterface).filter('fromRawXliffToLayer0', channel).transform(segment);
   }
 
   /**
    * Used to export Database XML string into TMX files as valid XML
-   *
-   * @param segment
-   * @returns
    */
   public fromLayer0ToRawXliff(segment: string): string {
     const channel = new Pipeline(this.source, this.target, this.dataRefMap);
@@ -199,8 +163,6 @@ export class MateCatFilter extends AbstractFilter {
     channel.addLast(new RestorePlaceHoldersToXLIFFLtGt());
     channel.addLast(new LtGtEncode());
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     return (this.featureSet as FeatureSetInterface).filter('fromLayer0ToRawXliff', channel).transform(segment);
   }
 
@@ -211,12 +173,6 @@ export class MateCatFilter extends AbstractFilter {
    *
    * The source holds the truth :D
    * realigns the target ids by matching the content of the base64.
-   *
-   * @see getSegmentsController in matecat
-   *
-   * @param source
-   * @param target
-   * @returns
    */
   public realignIDInLayer1(source: string, target: string): string {
     const pattern = /<ph id ?= ?[\"\'](mtc_[0-9]+)[\"\'] ?(equiv-text=[\"\'].+?[\"\'] ?)\/>/i;
@@ -252,7 +208,6 @@ export class MateCatFilter extends AbstractFilter {
       if (srcTagPosition === -1) {
         // this means that the content of a tag is changed in the translation
         notFoundTargetTags[trgTagPosition] = b64;
-        // eslint-disable-next-line no-continue
         continue;
       } else {
         srcEquivTexts[srcTagPosition] = ''; // Remove the index to allow indexOf to find the equal next one if it is present
@@ -262,7 +217,6 @@ export class MateCatFilter extends AbstractFilter {
       const tagPositionInString = target.indexOf(trgTags[trgTagPosition][0], startOffset);
       if (tagPositionInString === -1) {
         // Should not happen if lengths match, but as a safeguard
-        // eslint-disable-next-line no-continue
         continue;
       }
 

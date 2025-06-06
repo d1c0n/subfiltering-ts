@@ -1,9 +1,5 @@
 import { FeatureSetInterface } from './contracts/FeatureSetInterface';
 
-/**
- * @abstract
- * @class AbstractFilter
- */
 export abstract class AbstractFilter {
   protected static _INSTANCE: AbstractFilter | null = null;
   protected featureSet!: FeatureSetInterface;
@@ -11,50 +7,27 @@ export abstract class AbstractFilter {
   protected target!: string | null;
   protected dataRefMap: Record<string, any> = {};
 
-  /**
-   * Update/Add featureSet
-   * @param {FeatureSetInterface} featureSet
-   */
+
   protected setFeatureSet(featureSet: FeatureSetInterface): void {
     this.featureSet = featureSet;
   }
 
-  /**
-   * @param {Record<string, any>} dataRefMap
-   */
   protected setDataRefMap(dataRefMap: Record<string, any> = {}): void {
     this.dataRefMap = dataRefMap;
   }
 
-  /**
-   * @param {string | null} source
-   */
   protected setSource(source: string | null): void {
     this.source = source;
   }
 
-  /**
-   * @param {string | null} target
-   */
   protected setTarget(target: string | null): void {
     this.target = target;
   }
 
-  /**
-   * Destroy the singleton
-   */
   public static destroyInstance(): void {
     AbstractFilter._INSTANCE = null;
   }
 
-  /**
-   * @param {FeatureSetInterface} featureSet
-   * @param {string | null} source
-   * @param {string | null} target
-   * @param {Record<string, any>} dataRefMap
-   * @returns {T}
-   * @throws {Error}
-   */
   public static getInstance<T extends AbstractFilter>(
     this: new () => T,
     featureSet: FeatureSetInterface,
@@ -77,19 +50,7 @@ export abstract class AbstractFilter {
     return instance;
   }
 
-  /**
-   * Used to transform database raw xml content ( Layer 0 ) to the sub filtered structures, used for server to server ( Ex: TM/MT ) communications ( Layer 1 )
-   * @param {string} segment
-   * @returns {string}
-   * @abstract
-   */
   public abstract fromLayer0ToLayer1(segment: string): string;
 
-  /**
-   * Used to transform external server raw xml content ( Ex: TM/MT ) to allow them to be stored in database ( Layer 0 ), used for server to server communications ( Layer 1 )
-   * @param {string} segment
-   * @returns {string}
-   * @abstract
-   */
   public abstract fromLayer1ToLayer0(segment: string): string;
 }

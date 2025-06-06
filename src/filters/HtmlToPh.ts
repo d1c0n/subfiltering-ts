@@ -14,8 +14,8 @@ export class HtmlToPh extends AbstractHandler implements CallbacksHandler {
     // decode attributes by locking <,> first
     // because a html tag has it's attributes encoded and here we get lt and gt decoded but not other parts of the string
     // Ex:
-    // incoming string : <a href="/users/settings?test=123&amp;ciccio=1" target="_blank">
-    // this should be: <a href="/users/settings?test=123&ciccio=1" target="_blank"> with only one ampersand encoding
+    // incoming string : <a href="/users/settings?test=123&amp;amp;ciccio=1" target="_blank">
+    // this should be:   <a href="/users/settings?test=123&amp;ciccio=1" target="_blank"> with only one ampersand encoding
     buffer = buffer.replace(/</g, "#_lt_#").replace(/>/g, "#_gt_#");
     buffer = this.htmlEntityDecode(buffer);
     buffer = buffer.replace(/#_lt_#/g, "<").replace(/#_gt_#/g, ">");
@@ -46,8 +46,6 @@ export class HtmlToPh extends AbstractHandler implements CallbacksHandler {
    *
    * Only tags should be converted here
    *
-   * @param {string} buffer
-   * @returns {boolean}
    */
   public _isTagValid(buffer: string): boolean {
     /*
@@ -63,9 +61,9 @@ export class HtmlToPh extends AbstractHandler implements CallbacksHandler {
       )
     ) {
       // this case covers when filters create an xliff tag inside an html tag:
-      // EX:
-      // original: <a href=\"<x id="1">\">
-      // <a href=\"##LESSTHAN##eCBpZD0iMSIv##GREATERTHAN##\">
+      //EX:
+      //original:  &lt;a href=\"<x id="1">\"&gt;
+      //  <a href=\"##LESSTHAN##eCBpZD0iMSIv##GREATERTHAN##\">
       if (
         buffer.includes(ConstantEnum.LTPLACEHOLDER) ||
         buffer.includes(ConstantEnum.GTPLACEHOLDER)
@@ -83,23 +81,17 @@ export class HtmlToPh extends AbstractHandler implements CallbacksHandler {
     return parser.transform(segment);
   }
 
-  // Helper function for html_entity_decode equivalent
   private htmlEntityDecode(str: string): string {
     let strDecoded = decode(str, { level: "xml" });
-    // re-encode quotes
-    // strDecoded = strDecoded.replace(/"/g, "&quot;").replace(/'/g, "&apos;");
     return strDecoded;
   }
 
-  // Helper function for htmlentities equivalent
   private htmlEntities(str: string): string {
     let strEncoded = encode(str, { level: "xml" });
-    // re-decode quotes
     strEncoded = strEncoded.replace(/&quot;/g, '"').replace(/&apos;/g, "'");
     return strEncoded;
   }
 
-  // Implement the _setSegmentContainsHtml method from CallbacksHandler
   public _setSegmentContainsHtml(): void {
     this.pipeline.setSegmentContainsHtml();
   }

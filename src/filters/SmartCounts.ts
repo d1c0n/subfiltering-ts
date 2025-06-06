@@ -2,10 +2,6 @@ import { AbstractHandler } from '../commons/AbstractHandler';
 import { CTypeEnum } from '../enums/CTypeEnum';
 
 export class SmartCounts extends AbstractHandler {
-  /**
-   * @param segment
-   * @returns string
-   */
   public transform(segment: string): string {
     /*
      * Examples:

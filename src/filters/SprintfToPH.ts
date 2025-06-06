@@ -19,14 +19,11 @@ export class SprintfToPH extends AbstractHandler {
    * 20%-zar - ignored
    * ```
    *
-   * @see
-   * - https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Strings/Articles/formatSpecifiers.html#//apple_ref/doc/uid/TP40004265-SW1
-   * - https://en.cppreference.com/w/c/io/fprintf
-   * - https://www.php.net/manual/en/function.sprintf.php
-   * - https://www.w3resource.com/c-programming/stdio/c_library_method_sprintf.php
+   * @see {@link https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Strings/Articles/formatSpecifiers.html#//apple_ref/doc/uid/TP40004265-SW1}
+   * @see {@link https://en.cppreference.com/w/c/io/fprintf}
+   * @see {@link https://www.php.net/manual/en/function.sprintf.php}
+   * @see {@link https://www.w3resource.com/c-programming/stdio/c_library_method_sprintf.php}
    *
-   * @param segment
-   * @returns string
    */
   public transform(segment: string): string {
     const sprintfLocker = new SprintfLocker(this.pipeline.getSource(), this.pipeline.getTarget());

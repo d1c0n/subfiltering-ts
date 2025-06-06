@@ -1,9 +1,7 @@
 import { AbstractHandler } from '../commons/AbstractHandler';
 
 export class EncodeControlCharsInXliff extends AbstractHandler {
-  /**
-   * @inheritDoc
-   */
+
   public transform(segment: string): string {
     return segment
       .replace(/\r\n/g, '&#13;&#10;')

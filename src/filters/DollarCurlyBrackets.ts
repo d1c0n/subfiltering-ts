@@ -3,9 +3,6 @@ import { ConstantEnum } from '../enums/ConstantEnum';
 import { CTypeEnum } from '../enums/CTypeEnum';
 
 export class DollarCurlyBrackets extends AbstractHandler {
-  /**
-   * @inheritDoc
-   */
   public transform(segment: string): string {
     const regex = /\$\{[^<>\s]+?\}/g;
     let match;

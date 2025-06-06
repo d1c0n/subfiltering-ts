@@ -1,12 +1,7 @@
-// file: DataRefRestoreHandler.ts
-// Assuming this file is in a directory like 'filters/' so paths make sense.
-// e.g., src/filters/DataRefRestoreHandler.ts
-
 import { AbstractHandler } from '../commons/AbstractHandler';
 import { CTypeEnum } from '../enums/CTypeEnum';
 import { DataRefReplacer } from '../utils/DataRefReplacer';
-import { Pipeline } from '../commons/Pipeline'; // Assuming Pipeline stub is available
-import { Buffer } from 'buffer'; // For base64 operations
+import { Buffer } from 'buffer';
 
 export class DataRefRestore extends AbstractHandler {
     private dataRefMap: Record<string, string> | undefined;
@@ -19,9 +14,7 @@ export class DataRefRestore extends AbstractHandler {
         // this.dataRefMap is initialized lazily in the transform method
     }
 
-    /**
-     * @inheritdoc
-     */
+
     public transform(segment: string): string {
         if (this.dataRefMap === undefined) { // Initialize once per instance
             this.dataRefMap = this.pipeline.getDataRefMap();

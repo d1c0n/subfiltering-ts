@@ -16,8 +16,6 @@ export class TwigToPh extends AbstractHandler {
    * #}
    * ```
    *
-   * @param segment
-   * @returns string
    */
   public transform(segment: string): string {
     const regex = /{{[^<>!{}]+?}}|{%[^<>!%]+?%}|{#[^<>!#]+?#}/g;

@@ -1,9 +1,5 @@
 import { Utils } from '../utils/Utils';
 
-/**
- * @file CTypeEnum.ts
- * @brief Defines a TypeScript enum for various content types (CTypes) used in subfiltering.
- */
 export enum CTypeEnum {
   // Layer 1
   ORIGINAL_X = 'x-original_x',
@@ -65,21 +61,11 @@ export class CTypeEnumHelper {
     }
   }
 
-  /**
-   * Checks if a given ctype string is a valid Matecat CType.
-   * @param ctype The ctype string to check.
-   * @returns True if the ctype is valid, false otherwise.
-   */
   public static isMatecatCType(ctype: string): boolean {
     CTypeEnumHelper.initializeConstantValues();
     return Object.prototype.hasOwnProperty.call(CTypeEnumHelper.allConstantValues, ctype);
   }
 
-  /**
-   * Checks if a given ctype string is a Layer 2 constant.
-   * @param ctype The ctype string to check.
-   * @returns True if the ctype is a Layer 2 constant, false otherwise.
-   */
   public static isLayer2Constant(ctype: string): boolean {
     CTypeEnumHelper.initializeConstantValues();
     return Object.prototype.hasOwnProperty.call(CTypeEnumHelper.layer2ConstantValues, ctype);

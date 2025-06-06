@@ -2,9 +2,7 @@ import { AbstractHandler } from '../commons/AbstractHandler';
 import { CTypeEnum } from '../enums/CTypeEnum';
 
 export class SquareSprintf extends AbstractHandler {
-  /**
-   * @inheritDoc
-   */
+
   public transform(segment: string): string {
     const tags = [
       '\\[\\%s\\]',

@@ -1,12 +1,7 @@
-// file: DataRefReplaceHandler.ts
-// Assuming this file is in a directory like 'filters/' so paths make sense.
-// e.g., src/filters/DataRefReplaceHandler.ts
-
 import * as xmljs from 'xml-js';
 import { CTypeEnum, CTypeEnumHelper } from '../enums/CTypeEnum';
 import { DataRefReplacer } from '../utils/DataRefReplacer';
 import { AbstractHandler } from '../commons/AbstractHandler';
-import { Pipeline } from '../commons/Pipeline';
 
 export class DataRefReplace extends AbstractHandler {
     private dataRefMap: Record<string, string> | undefined;
@@ -16,12 +11,8 @@ export class DataRefReplace extends AbstractHandler {
      */
     public constructor() {
         super();
-        // this.dataRefMap is initialized lazily in the transform method
     }
 
-    /**
-     * @inheritdoc
-     */
     public transform(segment: string): string {
         if (this.dataRefMap === undefined) { // Initialize once per instance
             this.dataRefMap = this.pipeline.getDataRefMap();
@@ -48,11 +39,20 @@ export class DataRefReplace extends AbstractHandler {
     }
 
     /**
-     * This function replaces ph tags (from Xliff 2.0) that don't have a dataRef correspondence
-     * (or dataRef is not in the map) with regular Matecat <ph> tags for UI presentation.
+     * This function replace encoded ph tags (from Xliff 2.0) without any dataRef correspondence
+     * to regular Matecat <ph> tag for UI presentation
+     *
+     * Example:
+     *
+     * We can control who sees content when with <ph id="source1" dataRef="source1"/>Visibility Constraints.
+     *
+     * Is transformed to:
+     *
+     * We can control who sees content when with &lt;ph id="mtc_ph_u_1" equiv-text="base64:PHBoIGlkPSJzb3VyY2UxIiBkYXRhUmVmPSJzb3VyY2UxIi8+"/&gt;Visibility Constraints.
+     *
      */
     private replace_Ph_TagsWithoutDataRefCorrespondenceToMatecatPhTags(segment: string): string {
-        const phTagRegex = /<(ph .*?)\/>/gi; // PHP: /<(ph .*?)>/iu
+        const phTagRegex = /<(ph .*?)\/>/gi;
         let match;
         
         const phTagsMatches: string[] = [];
@@ -123,9 +123,6 @@ export class DataRefReplace extends AbstractHandler {
             return false;
         }
 
-        // Check dataRef attribute against the dataRefMap
-        // this.dataRefMap is Record<string, string> (guaranteed to be an object, possibly empty)
-        // due to initialization logic in transform().
         if (attributes.hasOwnProperty('dataRef')) {
             const dataRefAttr = String(attributes.dataRef);
             // If dataRefMap does NOT have dataRefAttr as a key, then it's a "valid" tag for this replacement.
@@ -154,20 +151,16 @@ export class DataRefReplace extends AbstractHandler {
         let match;
 
         // --- Process opening tags ---
-        // Match opening tags on the current state of the segment
         const openingPcTagsMatches: string[] = [];
         const localOpeningPcTagRegex = new RegExp(openingPcTagRegex);
-        // The segment for matching opening tags is currentSegment (which is initial segment at this point)
         while ((match = localOpeningPcTagRegex.exec(currentSegment)) !== null) { 
             openingPcTagsMatches.push(match[0]);
         }
         
-        // PHP logic: if original segment had no opening <pc> tags, return (even if closing tags exist).
         if (openingPcTagsMatches.length === 0) {
             return currentSegment;
         }
         
-        // Iterate through collected opening tags and replace them in currentSegment
         for (const openingPcTag of openingPcTagsMatches) {
             const escapedOpeningPcTag = openingPcTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regexToReplace = new RegExp(escapedOpeningPcTag);
@@ -177,7 +170,6 @@ export class DataRefReplace extends AbstractHandler {
         }
 
         // --- Process closing tags ---
-        // PHP logic: closing tags are identified from the *original* segment state.
         const closingTagMatchesFromInitialSegment: string[] = [];
         const initialSegmentClosingRegex = new RegExp(closingPcTagRegex);
         // `segment` here refers to the state *before* opening tags were processed.
@@ -185,7 +177,6 @@ export class DataRefReplace extends AbstractHandler {
             closingTagMatchesFromInitialSegment.push(match[0]); // match[0] is '</pc>'
         }
 
-        // Iterate through collected closing tags (from original segment) and replace them in the *evolving* currentSegment
         for (const closingPcTag of closingTagMatchesFromInitialSegment) {
             const escapedClosingPcTag = closingPcTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regexToReplace = new RegExp(escapedClosingPcTag); 
