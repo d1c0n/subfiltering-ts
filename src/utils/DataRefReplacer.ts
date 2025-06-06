@@ -1,4 +1,4 @@
-import { DOMParser, XMLSerializer } from "@xmldom/xmldom";
+import { DOMParser, XMLSerializer, Node, Element } from "@xmldom/xmldom";
 import { CTypeEnum } from "../enums/CTypeEnum";
 
 // Helper interface is updated to remove the unreliable `isSelfClosed` flag.
@@ -82,7 +82,7 @@ export class DataRefReplacer {
 		}
 
 		// The unreliable isSelfClosed flag is removed.
-		const nodeString = this.xmlSerializer.serializeToString(element);
+		const nodeString = this.xmlSerializer.serializeToString(element as Node);
 
 		return {
 			tagName: element.tagName,
@@ -111,7 +111,7 @@ export class DataRefReplacer {
 			const adaptedNodes: AdaptedXmlNode[] = [];
 			for (let i = 0; i < rootElement.childNodes.length; i++) {
 				const node = rootElement.childNodes[i];
-				if (node.nodeType === 1) {
+				if (node.nodeType === node.ELEMENT_NODE) {
 					adaptedNodes.push(
 						this.transformDomToAdaptedNode(node as Element),
 					);
